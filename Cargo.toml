@@ -1,0 +1,30 @@
+[package]
+name = "async-bacnet"
+version = "0.2.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Async BACnet library based on embedded-bacnet and Tokio"
+keywords = ["bacnet", "embedded"]
+categories = ["embedded", "network-programming"]
+
+[dependencies]
+embedded-bacnet = { path = "../embeded-bacnet-upstream", features = ["alloc"] }
+tokio = { version = "1", features = ["net", "time", "sync", "rt"] }
+log = "0.4"
+socket2 = { version = "0.5.5", features = ["all"] }
+
+# CLI-only deps
+clap = { version = "4.5", features = ["derive"], optional = true }
+tracing = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"], optional = true }
+eyre = { version = "0.6", optional = true }
+serde_json = { version = "1.0", optional = true }
+
+[features]
+default = []
+serde = ["embedded-bacnet/serde"]
+cli = ["dep:clap", "dep:tracing", "dep:tracing-subscriber", "dep:eyre", "dep:serde_json", "serde"]
+
+[[bin]]
+name = "bacnet-cli"
+required-features = ["cli"]
