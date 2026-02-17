@@ -9,7 +9,7 @@ categories = ["embedded", "network-programming"]
 
 [dependencies]
 embedded-bacnet = { path = "../embeded-bacnet-upstream", features = ["alloc"] }
-tokio = { version = "1", features = ["net", "time", "sync", "rt"] }
+tokio = { version = "1", features = ["net", "time", "sync", "rt", "macros", "rt-multi-thread"] }
 log = "0.4"
 socket2 = { version = "0.5.5", features = ["all"] }
 

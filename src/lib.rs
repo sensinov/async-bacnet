@@ -9,7 +9,7 @@ pub use io::TokioUdpIo;
 
 // Re-export commonly used embedded-bacnet types
 pub use embedded_bacnet::application_protocol::primitives::data_value::{
-    ApplicationDataValue, Enumerated,
+    ApplicationDataValue, ApplicationDataValueWrite, Enumerated,
 };
 pub use embedded_bacnet::application_protocol::services::read_property::{
     ReadProperty, ReadPropertyAck, ReadPropertyValue,
