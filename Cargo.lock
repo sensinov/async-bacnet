@@ -79,7 +79,7 @@ dependencies = [
 [[package]]
 name = "bacnet-macros"
 version = "0.1.0"
-source = "git+https://github.com/sensinov/embedded-bacnet.git?branch=sensinov-new#02a9baf2590e10c7758bbe48764df86233affa89"
+source = "git+https://github.com/sensinov/embedded-bacnet.git?branch=sensinov-new#8c490232ff2c1a3d1c754bfee1aba5a742301bc3"
 dependencies = [
  "quote",
  "syn",
@@ -187,7 +187,7 @@ dependencies = [
 [[package]]
 name = "embedded-bacnet"
 version = "0.4.1"
-source = "git+https://github.com/sensinov/embedded-bacnet.git?branch=sensinov-new#02a9baf2590e10c7758bbe48764df86233affa89"
+source = "git+https://github.com/sensinov/embedded-bacnet.git?branch=sensinov-new#8c490232ff2c1a3d1c754bfee1aba5a742301bc3"
 dependencies = [
  "bacnet-macros",
  "defmt 0.3.100",

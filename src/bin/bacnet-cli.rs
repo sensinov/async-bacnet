@@ -120,6 +120,15 @@ struct BacnetCliArgs {
     write_value: Option<String>,
     #[clap(short = 't', long, requires = "write_value")]
     write_type: Option<ApplicationDataValueArg>,
+
+    #[clap(short = 'P', long, requires = "write_value", value_parser = clap::value_parser!(u8).range(1..=16))]
+    priority: Option<u8>,
+
+    #[clap(long, conflicts_with_all = ["write_value", "write_type", "property", "clear_priority"])]
+    priority_array: bool,
+
+    #[clap(long, conflicts_with_all = ["write_value", "write_type", "property"], value_parser = clap::value_parser!(u8).range(1..=16))]
+    clear_priority: Option<u8>,
 }
 
 impl BacnetCliArgs {
@@ -167,8 +176,32 @@ async fn main() -> Result<()> {
         .await
         .map_err(|e| eyre!("failed to create client: {e:?}"))?;
 
-    if let Some(write_value) = args.write_value() {
-        let request = WriteProperty::new(object_id, property_id, None, None, write_value);
+    if let Some(priority) = args.clear_priority {
+        let request = WriteProperty::new(
+            object_id,
+            PropertyId::PropPresentValue,
+            Some(priority),
+            None,
+            ApplicationDataValueWrite::Null,
+        );
+        client
+            .write_property(request)
+            .await
+            .map_err(|e| eyre!("failed to clear priority {priority}: {e:?}"))?;
+        println!("priority {priority} cleared");
+    } else if args.priority_array {
+        let request = ReadProperty::new(object_id, PropertyId::PropPriorityArray);
+        let ack = client
+            .read_property(request)
+            .await
+            .map_err(|e| eyre!("failed to read priority array: {e:?}"))?;
+        for (i, value) in ack.property_value.into_iter().enumerate() {
+            let priority = i + 1;
+            let v = value.map_err(|e| eyre!("failed to decode priority {priority}: {e:?}"))?;
+            println!("  priority {priority:>2}: {v}");
+        }
+    } else if let Some(write_value) = args.write_value() {
+        let request = WriteProperty::new(object_id, property_id, args.priority, None, write_value);
         client
             .write_property(request)
             .await
