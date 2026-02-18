@@ -1,4 +1,4 @@
-use clap::{Args, Parser};
+use clap::Parser;
 use eyre::{eyre, Result};
 use std::net::SocketAddr;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Registry};
@@ -41,13 +41,6 @@ impl ApplicationDataValueArg {
     }
 }
 
-#[derive(Debug, Args, Clone)]
-struct WriteArgs {
-    #[clap(short, long, requires = "write_value", required = false)]
-    write_value: String,
-    #[clap(short = 't', long, required = false)]
-    write_type: ApplicationDataValueArg,
-}
 
 #[derive(Debug, Clone, Copy, clap::ValueEnum)]
 #[repr(u32)]
@@ -123,8 +116,10 @@ struct BacnetCliArgs {
     #[clap(short, long, default_value = "85")]
     property: u32,
 
-    #[clap(flatten)]
-    write: Option<WriteArgs>,
+    #[clap(short, long, requires = "write_type")]
+    write_value: Option<String>,
+    #[clap(short = 't', long, requires = "write_value")]
+    write_type: Option<ApplicationDataValueArg>,
 }
 
 impl BacnetCliArgs {
@@ -142,10 +137,13 @@ impl BacnetCliArgs {
     }
 
     fn write_value(&self) -> Option<ApplicationDataValueWrite<'static>> {
-        self.write.as_ref().map(|v| {
-            v.write_type
-                .to_value(serde_json::from_str(&v.write_value).expect("invalid json"))
-        })
+        match (&self.write_value, &self.write_type) {
+            (Some(value), Some(write_type)) => {
+                let json_value = serde_json::from_str(value).expect("invalid json");
+                Some(write_type.to_value(json_value))
+            }
+            _ => None,
+        }
     }
 }
 
