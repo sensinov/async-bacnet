@@ -8,7 +8,7 @@ keywords = ["bacnet", "embedded"]
 categories = ["embedded", "network-programming"]
 
 [dependencies]
-embedded-bacnet = { path = "../embeded-bacnet-upstream", features = ["alloc"] }
+embedded-bacnet = { git = "https://github.com/sensinov/embedded-bacnet.git", branch = "sensinov-new", features = ["alloc"] }
 tokio = { version = "1", features = ["net", "time", "sync", "rt", "macros", "rt-multi-thread"] }
 log = "0.4"
 socket2 = { version = "0.5.5", features = ["all"] }
