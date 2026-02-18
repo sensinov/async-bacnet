@@ -24,6 +24,12 @@ pub struct Client {
     buf: Vec<u8>,
 }
 
+impl std::fmt::Debug for Client {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Client").finish_non_exhaustive()
+    }
+}
+
 impl Client {
     /// Create a new client connected to the given BACnet device address.
     pub async fn new(peer: SocketAddr) -> Result<Self, Error> {

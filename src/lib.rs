@@ -15,7 +15,7 @@ pub use embedded_bacnet::application_protocol::services::read_property::{
     ReadProperty, ReadPropertyAck, ReadPropertyValue,
 };
 pub use embedded_bacnet::application_protocol::services::read_property_multiple::{
-    ReadPropertyMultiple, ReadPropertyMultipleAck,
+    ReadPropertyMultiple, ReadPropertyMultipleAck, ReadPropertyMultipleObject,
 };
 pub use embedded_bacnet::application_protocol::services::write_property::WriteProperty;
 pub use embedded_bacnet::common::object_id::{ObjectId, ObjectType};
